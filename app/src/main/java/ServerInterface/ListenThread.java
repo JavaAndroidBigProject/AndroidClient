@@ -1,5 +1,7 @@
 package ServerInterface;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -29,7 +31,8 @@ class ListenThread extends Thread{
 	@Override
 	public void run(){
 		try {
-			Scanner scanner = new Scanner(socket.getInputStream());
+			Log.e("xie","threadqid");
+			Scanner scanner = new Scanner(socket.getInputStream(),"UTF-8");
 			while(scanner.hasNext()){
 				String commandsLine = scanner.nextLine();
 				String [] commands = commandsLine.split("#");

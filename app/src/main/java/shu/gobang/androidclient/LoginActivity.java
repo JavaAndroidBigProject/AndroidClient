@@ -1,5 +1,8 @@
 package shu.gobang.androidclient;
 
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,13 +29,19 @@ public class LoginActivity extends AppCompatActivity {
 		et_user = (EditText)findViewById(R.id.passwordedit);
 		et_password = (EditText)findViewById(R.id.useredit);
 
-		try {
-			androidInterface = new AndroidInterface(InetAddress.getByName("yidea.xyz"),4000);
-		}catch (UnknownHostException e){
-			androidInterface = null;
-			Toast.makeText(this,"当前网络不可用",Toast.LENGTH_LONG);
-		}
-		((MyApplication)getApplication()).androidInterface = androidInterface;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					androidInterface = new AndroidInterface(InetAddress.getByName("yidea.xyz"),4000,(MyApplication)getApplication());
+				}catch (Exception e){
+					androidInterface = null;
+					Toast.makeText(LoginActivity.this,"当前网络不可用",Toast.LENGTH_LONG);
+				}
+				((MyApplication)getApplication()).androidInterface = androidInterface;
+			}
+		}).start();
+
 
 		bt_login.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -50,8 +59,42 @@ public class LoginActivity extends AppCompatActivity {
 		bt_registe.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+				startActivity(intent);
 			}
 		});
+	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+		LoginHandle loginHandle = new LoginHandle();
+		((MyApplication)getApplication()).loginHandle = loginHandle;
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		((MyApplication)getApplication()).loginHandle = null;
+	}
+
+	public class LoginHandle extends Handler{
+		public LoginHandle(){
+			super();
+		}
+
+		@Override
+		public void handleMessage(Message msg){
+			switch (msg.what){
+				case 1:
+					//登入成功
+					break;
+				case 2:
+					Bundle bundle = msg.getData();
+					String reason = bundle.getString("reason", "未知错误");
+					Toast.makeText(LoginActivity.this,reason,Toast.LENGTH_LONG).show();
+					break;
+			}
+		}
 	}
 }

@@ -9,23 +9,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/newuser"
         android:layout_centerVertical="true"
         android:textSize="30dp"
-        android:paddingLeft="15dp"
-        android:text="用户名: " />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/newuser"
-        android:textSize="30dp"
         android:text="密码: "
-        android:layout_alignRight="@id/newuser"
+        android:paddingLeft="45dp"
         android:id="@+id/newpassword" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/newuser"
+        android:id="@+id/newuser"
+        android:layout_above="@id/newpassword"
+        android:textSize="30dp"
+        android:layout_alignRight="@id/newpassword"
+        android:text="用户名: " />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newpassword"
         android:textSize="30dp"
         android:text="邮箱: "
         android:layout_alignRight="@id/newuser"
@@ -41,25 +41,19 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/newpassword"
         android:layout_alignBottom="@id/newpassword"
+        android:inputType="textPassword"
         android:id="@+id/newpasswordedit"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv1"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bt_login"
-            android:textSize="25dp"
-            android:text="登入"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:id="@+id/bt_registe"
-            android:text="注册"/>
-    </LinearLayout>
+        android:layout_toRightOf="@id/tv1"
+        android:layout_alignBottom="@id/tv1"/>
+     <Button
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:text="确认"
+         android:textSize="25dp"
+         android:id="@+id/bt_confirm"
+         android:layout_below="@id/tv1"/>
 </RelativeLayout>

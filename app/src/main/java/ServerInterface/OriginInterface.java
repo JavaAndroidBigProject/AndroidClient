@@ -1,10 +1,13 @@
 package ServerInterface;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 原始业务类，安卓客户端业务类和PC客户端业务类基于其实现<br>
@@ -58,7 +61,7 @@ public abstract class OriginInterface {
 	/**
 	 * 退出游戏,将正常断开与服务器连接
 	 */
-	private void quit(){
+	public void quit(){
 		if(listenThread != null && listenThread.isAlive()){
 			listenThread.discontect();
 		}
@@ -72,16 +75,35 @@ public abstract class OriginInterface {
 	private boolean connect(){
 		if(socket != null && socket.isConnected())
 			return true;
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					socket = new Socket(inetAddress, port);
+					printStream = new PrintStream(socket.getOutputStream(),false,"UTF-8");
+				} catch (IOException e) {
+					socket = null;
+					e.printStackTrace();
+				}
+			}
+		});
 		try {
-			socket = new Socket(inetAddress, port);
-			printStream = new PrintStream(socket.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-			onConnectionFail(e.getMessage());
+			thread.join();
+		}catch (InterruptedException e){
+
+		}
+//		try{
+//			Thread.sleep(300);
+//		}catch (Exception e){
+//
+//		}
+		if(socket == null) {
 			return false;
 		}
 		listenThread = new ListenThread(socket, this);
+//		Log.e("xie","线程启动");
 		listenThread.start();
+
 		gettingTablesThread = new GettingTablesThread(this);
 		gettingTablesThread.start();
 		return true;
