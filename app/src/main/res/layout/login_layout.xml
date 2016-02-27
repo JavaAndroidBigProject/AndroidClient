@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".LoginActivity">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/user"
+		android:layout_centerVertical="true"
+		android:textSize="30dp"
+		android:paddingLeft="15dp"
+		android:text="用户名: " />
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_above="@id/user"
+		android:textSize="30dp"
+		android:text="密码: "
+		android:layout_alignRight="@id/user"
+		android:id="@+id/password" />
+	<EditText
+		android:layout_width="200dp"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/user"
+		android:layout_alignBottom="@id/user"
+		android:id="@+id/useredit"/>
+	<EditText
+		android:layout_width="200dp"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/password"
+		android:layout_alignBottom="@id/password"
+		android:id="@+id/passwordedit"/>
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/user"
+		android:layout_centerHorizontal="true"
+		android:layout_margin="10dp"
+		android:orientation="horizontal">
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/bt_login"
+			android:textSize="25dp"
+			android:text="登入"/>
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="25dp"
+			android:id="@+id/bt_registe"
+			android:text="注册"/>
+	</LinearLayout>
+</RelativeLayout>
