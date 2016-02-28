@@ -134,6 +134,8 @@ public class TableActivity extends AppCompatActivity{
                         startActivity(intent);
                     }
                     break;
+                case 10:
+                    Toast.makeText(TableActivity.this,"连接断开,请清除后台重新启动程序",Toast.LENGTH_SHORT).show();
             }
 
         }

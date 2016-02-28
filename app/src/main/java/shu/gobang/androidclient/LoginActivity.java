@@ -69,11 +69,13 @@ public class LoginActivity extends AppCompatActivity {
 		super.onResume();
 		loginHandle = new LoginHandle();
 		AndroidInterface.getInstance().loginHandle = loginHandle;
+		AndroidInterface.getInstance().isInLoginActivity = true;
 	}
 
 	@Override
-	public void onPause(){
-		super.onPause();
+	public void onStop(){
+		super.onStop();
+		AndroidInterface.getInstance().isInLoginActivity = false;
 	}
 
 	public class LoginHandle extends Handler{
@@ -94,6 +96,8 @@ public class LoginActivity extends AppCompatActivity {
 					String reason = bundle.getString("reason", "未知错误");
 					Toast.makeText(LoginActivity.this,reason,Toast.LENGTH_LONG).show();
 					break;
+				case 10:
+					Toast.makeText(LoginActivity.this,"连接断开,请清除后台重新启动程序",Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

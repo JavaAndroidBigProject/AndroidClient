@@ -184,8 +184,10 @@ public class GameActivity extends AppCompatActivity{
                     break;
                 case 6:
                     Bundle bundle4 = msg.getData();
-                    AndroidInterface.getInstance().respondRetract(bundle4.getBoolean("reaction",false));
+                    AndroidInterface.getInstance().respondRetract(bundle4.getBoolean("reaction", false));
                     break;
+                case 10:
+                    Toast.makeText(GameActivity.this, "连接断开,请清除后台重新启动程序", Toast.LENGTH_SHORT).show();
             }
         }
     }

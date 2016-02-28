@@ -19,8 +19,6 @@ import shu.gobang.androidclient.TableActivity;
  * Created by Administrator on 2016/2/27.
  */
 public class AndroidInterface extends OriginInterface{
-    static boolean isConnneted;
-    public boolean reaction, changed;
 
     public GameActivity.GameHandle gameHandle;
     public TableActivity.TableHandle tableHandle;
@@ -29,6 +27,8 @@ public class AndroidInterface extends OriginInterface{
     public RegisterActivity.RegisterHandle registerHandle;
     public boolean isInTableActivity;
     public boolean isInGameActivity;
+    public boolean isInLoginActivity;
+    public boolean isInRegisterActivity;
 
     private static AndroidInterface androidInterface;
     public MyApplication myApplication;
@@ -83,7 +83,32 @@ public class AndroidInterface extends OriginInterface{
     public void onLostConnection(String reason) {
 //        isConnneted = false;
         Log.e("xie","onLostConnection  "+reason);
-//        System.exit(0);
+        if(isInTableActivity){
+            if(tableHandle != null) {
+                Message msg = tableHandle.obtainMessage();
+                msg.what = 10;
+                tableHandle.sendMessage(msg);
+            }
+        }else if(isInGameActivity){
+            if(gameHandle != null) {
+                Message msg = gameHandle.obtainMessage();
+                msg.what = 10;
+                gameHandle.sendMessage(msg);
+            }
+        }else if(isInRegisterActivity){
+            if(registerHandle != null) {
+                Message msg = registerHandle.obtainMessage();
+                msg.what = 10;
+                registerHandle.sendMessage(msg);
+            }
+        }else if(isInLoginActivity){
+            if(loginHandle != null) {
+                Message msg = loginHandle.obtainMessage();
+                msg.what = 10;
+                loginHandle.sendMessage(msg);
+            }
+        }
+        System.exit(0);
     }
 
     @Override

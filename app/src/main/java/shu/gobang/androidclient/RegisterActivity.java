@@ -48,11 +48,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onResume();
         registerHandle = new RegisterHandle();
         AndroidInterface.getInstance().registerHandle = registerHandle;
+        AndroidInterface.getInstance().isInRegisterActivity = true;
     }
 
     @Override
-    public void onPause(){
-        super.onPause();
+    public void onStop(){
+        super.onStop();
+        AndroidInterface.getInstance().isInRegisterActivity = false;
     }
 
     public class RegisterHandle extends Handler {
@@ -68,12 +70,15 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this,"恭喜你,注册成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this,TableActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
                 case 0:
                     Bundle bundle = msg.getData();
                     String reason = bundle.getString("reason", "未知错误");
                     Toast.makeText(RegisterActivity.this,"注册失败  "+reason,Toast.LENGTH_LONG).show();
                     break;
+                case 10:
+                    Toast.makeText(RegisterActivity.this,"连接断开,请清除后台重新启动程序",Toast.LENGTH_SHORT).show();
             }
         }
     }
