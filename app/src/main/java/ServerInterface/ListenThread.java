@@ -31,7 +31,7 @@ class ListenThread extends Thread{
 	@Override
 	public void run(){
 		try {
-			Log.e("xie","threadqid");
+//			Log.e("xie","threadqid");
 			Scanner scanner = new Scanner(socket.getInputStream(),"UTF-8");
 			while(scanner.hasNext()){
 				String commandsLine = scanner.nextLine();
@@ -55,7 +55,7 @@ class ListenThread extends Thread{
 						int index = 0;
 						for(int i = 0; i < 15; ++i)
 							for(int j = 0; j < 15; ++j){
-								board[i][j] = commands[6].charAt(index++) - '0';
+								board[i][j] = commands[8].charAt(index++) - '0';
 							}
 						originInterface.onTableChange(
 								new PlayerInfo(commands[1], Integer.parseInt(commands[2])),
@@ -64,8 +64,8 @@ class ListenThread extends Thread{
 								Boolean.parseBoolean(commands[6]),
 								Boolean.parseBoolean(commands[7]),
 								board,
-								Boolean.parseBoolean(commands[8]),
-								Boolean.parseBoolean(commands[9])
+								Boolean.parseBoolean(commands[9]),
+								Boolean.parseBoolean(commands[10])
 						);
 						break;
 					case "ON_GAME_OVER":
@@ -84,7 +84,7 @@ class ListenThread extends Thread{
 						originInterface.onRespondQuitTable();
 						break;
 					default:
-						throw new Exception("Wrong command:" + commandsLine);
+//						throw new Exception("Wrong command:" + commandsLine);
 				}
 			}
 			if(!ifNeedClose){

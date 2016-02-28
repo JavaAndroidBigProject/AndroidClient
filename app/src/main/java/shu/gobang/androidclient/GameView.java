@@ -5,10 +5,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import Client.AndroidInterface;
 
 /**
  * Created by Administrator on 2016/2/27.
@@ -20,20 +23,19 @@ public class GameView extends View{
     boolean isPlaying;
     int x, y, padding, width;
     float d;
-    MyApplication myApplication;
+//    MyApplication myApplication;
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        isMyTurn = true;
+        isMyTurn = false;
+        board = new int[15][15];
     }
 
     @Override
     public void onMeasure(int width, int height){
         int specSize = MeasureSpec.getSize(width);
         setMeasuredDimension(specSize, specSize);
-        board = new int[15][15];
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onDraw(Canvas canvas){
         padding = 40;
@@ -52,10 +54,12 @@ public class GameView extends View{
             for(int j=0;j<15;j++){
                 if(board[i][j] == 1){
                     paint.setColor(Color.BLACK);
-                    canvas.drawOval(padding+i*d-d/2+4,padding+j*d-d/2+4,padding+i*d+d/2-4,padding+j*d+d/2-4,paint);
+                    RectF rectF = new RectF(padding+i*d-d/2+4,padding+j*d-d/2+4,padding+i*d+d/2-4,padding+j*d+d/2-4);
+                    canvas.drawOval(rectF,paint);
                 }else if(board[i][j] == 2){
                     paint.setColor(Color.LTGRAY);
-                    canvas.drawOval(padding + i * d - d / 2 + 4, padding + j * d - d / 2 + 4, padding + i * d + d / 2 - 4, padding + j * d + d / 2 - 4, paint);
+                    RectF rectF = new RectF(padding + i * d - d / 2 + 4, padding + j * d - d / 2 + 4, padding + i * d + d / 2 - 4, padding + j * d + d / 2 - 4);
+                    canvas.drawOval(rectF, paint);
                 }
             }
         }
@@ -72,10 +76,8 @@ public class GameView extends View{
                         board[x][y] = 1;
                     else
                         board[x][y] = 2;
-                    if (myApplication != null && myApplication.androidInterface != null) {
-                        myApplication.androidInterface.move(x, y);
-                    }
-//                    board[x][y] = 1;invalidate();
+                    AndroidInterface.getInstance().move(x,y);
+//                 board[x][y] = 1;invalidate();
                 }
             }
         }

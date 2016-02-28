@@ -1,14 +1,18 @@
 package shu.gobang.androidclient;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import Client.AndroidInterface;
 import ServerInterface.TableInfo;
 
 /**
@@ -18,11 +22,15 @@ public class TableActivity extends AppCompatActivity{
     ImageView[] table;
     Button[] bt;
     TextView[] tv;
+    View.OnClickListener onClickListener;
+    TableHandle tableHandle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
-
+        setTitle("大厅");
+//        if(((MyApplication)getApplication()).androidInterface == null)
+//            Log.e("xie","androidint wei null");
         table = new ImageView[8];
         bt = new Button[4];
         tv = new TextView[8];
@@ -42,26 +50,50 @@ public class TableActivity extends AppCompatActivity{
         tv[6] = (TextView)findViewById(R.id.table4_left_name);
         table[7] = (ImageView)findViewById(R.id.table4_right);
         tv[7] = (TextView)findViewById(R.id.table4_right_name);
-
-
+        bt[0] = (Button)findViewById(R.id.add_table1);
+        bt[1] = (Button)findViewById(R.id.add_table2);
+        bt[2] = (Button)findViewById(R.id.add_table3);
+        bt[3] = (Button)findViewById(R.id.add_table4);
+        onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if(((MyApplication)getApplication()).androidInterface == null)
+//                    Log.e("xie","err");
+                if(v == bt[0])
+                    AndroidInterface.getInstance().enterTable(1);
+                else if(v == bt[1])
+                    AndroidInterface.getInstance().enterTable(2);
+                else if(v == bt[2])
+                    AndroidInterface.getInstance().enterTable(3);
+                else if(v == bt[3])
+                    AndroidInterface.getInstance().enterTable(4);
+            }
+        };
+        bt[0].setOnClickListener(onClickListener);
+        bt[1].setOnClickListener(onClickListener);
+        bt[2].setOnClickListener(onClickListener);
+        bt[3].setOnClickListener(onClickListener);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        ((MyApplication)getApplication()).isInTableActivity = true;
-        ((MyApplication)getApplication()).tableHandle = new TableHandle();
+        AndroidInterface.getInstance().isInTableActivity = true;
+        AndroidInterface.getInstance().isInGameActivity = false;
+        tableHandle = new TableHandle();
+        AndroidInterface.getInstance().tableHandle = tableHandle;
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        ((MyApplication)getApplication()).tableHandle = null;
     }
     @Override
     protected  void onStop(){
         super.onStop();
-        ((MyApplication)getApplication()).isInTableActivity = false;
+        if(AndroidInterface.getInstance().isInTableActivity)
+            AndroidInterface.getInstance().quit();
+        AndroidInterface.getInstance().isInTableActivity = false;
     }
 
     public class TableHandle extends Handler {
@@ -76,14 +108,17 @@ public class TableActivity extends AppCompatActivity{
                     Bundle bundle = msg.getData();
                     TableInfo[] tableInfos = (TableInfo[])bundle.getSerializable("tableinfos");
                     for(int i =0;i<tableInfos.length;i++){
-                        if(tableInfos[i].player1 != null){
+                        if(!tableInfos[i].player1.name.equals("empty")){
                             table[i*2].setImageResource(R.drawable.white);
-                            tv[i*2].setText(tableInfos[0].player1.name);
+                        }else {
+                            table[i*2].setImageResource(0);
                         }
-                        if(tableInfos[i].player2 != null){
+                        tv[i*2].setText(tableInfos[i].player1.name);
+                        if(!tableInfos[i].player2.name.equals("empty")){
                             table[i*2+1].setImageResource(R.drawable.black);
-                            tv[i*2+1].setText(tableInfos[0].player2.name);
-                        }
+                        }else
+                            table[i*2+1].setImageResource(0);
+                        tv[i*2+1].setText(tableInfos[i].player2.name);
                     }
                     break;
                 case 1:
@@ -94,7 +129,9 @@ public class TableActivity extends AppCompatActivity{
                     if(!ifEntered)
                         Toast.makeText(TableActivity.this,reason,Toast.LENGTH_LONG).show();
                     else{
-
+                        AndroidInterface.getInstance().isInTableActivity = false;
+                        Intent intent = new Intent(TableActivity.this,GameActivity.class);
+                        startActivity(intent);
                     }
                     break;
             }

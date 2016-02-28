@@ -87,6 +87,7 @@ public abstract class OriginInterface {
 				}
 			}
 		});
+		thread.start();
 		try {
 			thread.join();
 		}catch (InterruptedException e){
@@ -114,12 +115,15 @@ public abstract class OriginInterface {
 	 * @param string
 	 * 字符串
 	 */
-	private void writeInSocket(String string){
-		try{
+	private void writeInSocket(String string) {
+//		Log.e("xie",string);
+		try {
 			printStream.println(string);
 			printStream.flush();
-		}catch (Exception e){
+//			Log.e("xie", "发送chengg");
+		} catch (Exception e) {
 			e.printStackTrace();
+//			Log.e("xie", "发送失败");
 			onLostConnection(e.getMessage());
 		}
 	}
@@ -182,6 +186,7 @@ public abstract class OriginInterface {
 	 * 游戏桌编号
 	 */
 	final public void enterTable(int tableId){
+		Log.e("xie","entertable");
 		writeInSocket("ENTER_TABLES#" + tableId);
 	}
 
